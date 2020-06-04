@@ -1,7 +1,7 @@
 package videostore;
 
 public enum Category {
-    CHILDRENS {
+    CHILDREN {
         @Override
         public double getPrice(int rentedDays) {
             double amount = 1.5;
@@ -11,7 +11,7 @@ public enum Category {
             return amount;
         }
     },
-    REGULAR{
+    REGULAR {
         @Override
         public double getPrice(int rentedDays) {
             double amount = 2.0;
@@ -21,7 +21,7 @@ public enum Category {
             return amount;
         }
     },
-    NEW_RELEASE{
+    NEW_RELEASE {
         @Override
         public double getPrice(int rentedDays) {
             return rentedDays * 3.0;
