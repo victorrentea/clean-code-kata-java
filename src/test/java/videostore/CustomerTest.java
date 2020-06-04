@@ -6,6 +6,7 @@ import org.junit.Test;
 
 public class CustomerTest {
 
+
     @Test
     public void characterizationTest() {
         Customer customer = new Customer("John Doe");
