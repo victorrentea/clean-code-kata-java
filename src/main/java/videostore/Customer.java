@@ -1,6 +1,7 @@
 package videostore;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Customer {
@@ -11,25 +12,27 @@ public class Customer {
         this.name = name;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public void addRental(Rental arg) {
         rentals.add(arg);
     }
 
-   public String generateRentalRecord() {
-        StringBuilder result = new StringBuilder("Rental Record for " + name + "\n");
-        rentals.forEach(rental ->
-                result.append("\t" + rental.getMovie().getTitle() + "\t" + rental.getPrice() + "\n")
-        );
-        result.append("Amount owed is " + generateCosts())
-                .append("\nYou earned " + generateRenterPoints() + " frequent renter points");
-        return result.toString();
+    public List<Rental> getRentals() {
+        return Collections.unmodifiableList(rentals);
     }
 
-    private double generateCosts() {
+    public String generateRentalRecord() {
+        return new StatementFormatter(this).getGeneratedStatement();
+    }
+
+    public double generateCosts() {
         return rentals.stream().mapToDouble(Rental::getPrice).sum();
     }
 
-    private int generateRenterPoints() {
+    public int generateRenterPoints() {
         return rentals.stream().mapToInt(Rental::getRentalPoints).sum();
     }
 
