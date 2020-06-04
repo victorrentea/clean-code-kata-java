@@ -18,7 +18,7 @@ public class Customer {
         return name;
     }
 
-   public String statement() {
+    public String buildStatement() {
         StatementBuilder builder = new StatementBuilder(name, rentals);
         return builder.build();
     }
