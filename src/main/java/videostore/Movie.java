@@ -1,5 +1,4 @@
 package videostore;
-//test
 
 public class Movie {
   public enum Category {
