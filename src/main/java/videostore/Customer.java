@@ -19,12 +19,12 @@ public class Customer {
         StringBuilder result = new StringBuilder ("Rental Record for " + name + "\n");
         result.append (getFiguresForRental ());
         double totalPrice = rentals.stream ().mapToDouble (this::computePrice).sum ();
-        getFooterLines (totalPrice, computeTotalFrequentPoints (), result);
+        result.append (getFooterLines (totalPrice, computeTotalFrequentPoints ()));
         return result.toString ();
     }
 
     private String getFiguresForRental () {
-        return rentals.stream()
+        return rentals.stream ()
                 .map (this::formatStatementLine)
                 .collect (Collectors.joining ());
     }
@@ -33,9 +33,8 @@ public class Customer {
         return String.format ("\t%s\t%s\n", rental.getMovie ().getTitle (), computePrice (rental));
     }
 
-    void getFooterLines (final double totalPrice, final int frequentRenterPoints, final StringBuilder result) {
-        result.append ("Amount owed is ").append (totalPrice).append ("\n");
-        result.append ("You earned ").append (frequentRenterPoints).append (" frequent renter points");
+    String getFooterLines (final double totalPrice, final int frequentRenterPoints) {
+        return String.format ("Amount owed is %s\nYou earned %s frequent renter points", totalPrice, frequentRenterPoints);
     }
 
 

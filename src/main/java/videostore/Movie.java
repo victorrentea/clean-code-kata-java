@@ -49,7 +49,8 @@ public class Movie {
         return title;
     }
 
-    boolean isNewRelease () {
+    public boolean isNewRelease () {
         return this.category == Movie.Category.NEW_RELEASE;
     }
+
 }
