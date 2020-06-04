@@ -14,12 +14,11 @@ public class Customer {
         rentals.add(arg);
     }
 
-    public String getName() {
-        return name;
+    public List<Rental> getRentals() {
+        return Collections.unmodifiableList(rentals);
     }
 
-    public String buildStatement() {
-        StatementBuilder builder = new StatementBuilder(name, rentals);
-        return builder.build();
+    public String getName() {
+        return name;
     }
 }

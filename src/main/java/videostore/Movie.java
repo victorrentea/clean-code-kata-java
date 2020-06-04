@@ -5,6 +5,8 @@ public class Movie {
         CHILDREN,
         REGULAR,
         NEW_RELEASE
+
+
     }
 
     private final String title;

@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 
-public class CustomerTest {
+public class RentalRecordBuilderTest {
 
 
     @Test
@@ -20,7 +20,8 @@ public class CustomerTest {
                 + "	Inception	6.5\n"
                 + "Amount owed is 32.0\n"
                 + "You earned 4 frequent renter points";
-        
-        Assert.assertEquals(expected, customer.buildStatement());
+
+        RentalRecordBuilder builder = new RentalRecordBuilder(customer.getName(), customer.getRentals());
+        Assert.assertEquals(expected, builder.build());
     }
 }
