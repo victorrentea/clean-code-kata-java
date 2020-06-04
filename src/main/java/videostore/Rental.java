@@ -18,23 +18,7 @@ public class Rental {
     }
 
     public double getPrice() {
-        switch (movie.getCategory()) {
-            case REGULAR:
-                if (daysRented > 2) {
-                    return 2 + (daysRented - 2) * 1.5;
-                } else {
-                    return 2;
-                }
-            case NEW_RELEASE:
-                return daysRented * 3;
-            case CHILDREN:
-                if (daysRented > 3) {
-                    return 1.5 + (daysRented - 3) * 1.5;
-                }
-                return 1.5;
-            default:
-                return 0;
-        }
+        return movie.getCategory().getPrice(daysRented);
     }
 
     public int getPoints() {

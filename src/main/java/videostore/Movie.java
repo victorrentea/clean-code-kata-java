@@ -2,11 +2,33 @@ package videostore;
 
 public class Movie {
     public enum Category {
-        CHILDREN,
-        REGULAR,
-        NEW_RELEASE
+        CHILDREN() {
+            @java.lang.Override
+            public double getPrice(int daysRented) {
+                if (daysRented > 3) {
+                    return 1.5 + (daysRented - 3) * 1.5;
+                }
+                return 1.5;
+            }
+        },
+        REGULAR() {
+            @java.lang.Override
+            public double getPrice(int daysRented) {
+                if (daysRented > 2) {
+                    return 2 + (daysRented - 2) * 1.5;
+                } else {
+                    return 2;
+                }
+            }
+        },
+        NEW_RELEASE() {
+            @java.lang.Override
+            public double getPrice(int daysRented) {
+                return daysRented * 3;
+            }
+        };
 
-
+        public abstract double getPrice(int daysRented);
     }
 
     private final String title;
