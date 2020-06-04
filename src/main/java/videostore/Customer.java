@@ -40,6 +40,7 @@ public class Customer {
             case CHILDRENS:
                thisAmount += 1.5;
                if (each.getDaysRented() > 3)
+
                   thisAmount += (each.getDaysRented() - 3) * 1.5;
                break;
          }
