@@ -5,14 +5,11 @@ import java.util.stream.Collectors;
 
 public class Customer {
     private final String name;
-    private final List<Rental> rentals = new ArrayList<> ();
+    private final List<Rental> rentals;
 
-    public Customer (String name) {
+    public Customer (String name, final List<Rental> rentals) {
         this.name = name;
-    }
-
-    public void addRental (Rental arg) {
-        rentals.add (arg);
+        this.rentals = rentals;
     }
 
     public String statement () {
