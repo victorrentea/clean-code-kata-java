@@ -1,19 +1,28 @@
 package videostore;
 
 public class Rental {
-  private Movie _movie;
-  private int _daysRented;
+  private final static int BONUS_DAYS_THRESHOLD = 1;
+
+  private final Movie movie;
+  private final int daysRented;
 
   public Rental(Movie movie, int daysRented) {
-    _movie = movie;
-    _daysRented = daysRented;
+    if (movie == null || daysRented == 0) {
+      throw new IllegalArgumentException();
+    }
+    this.movie = movie;
+    this.daysRented = daysRented;
   }
 
   public int getDaysRented() {
-    return _daysRented;
+    return daysRented;
   }
 
   public Movie getMovie() {
-    return _movie;
+    return movie;
+  }
+
+  public boolean hasBonusPoint(){
+    return this.movie.getPriceCode() == Movie.Category.NEW_RELEASE && this.daysRented > BONUS_DAYS_THRESHOLD;
   }
 }

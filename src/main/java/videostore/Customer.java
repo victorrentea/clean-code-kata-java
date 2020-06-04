@@ -3,8 +3,8 @@ package videostore;
 import java.util.*;
 
 public class Customer {
-   private String name;
-   private List<Rental> rentals = new ArrayList<>();
+   private final String name;
+   private final List<Rental> rentals = new ArrayList<>();
 
    public Customer(String name) {
       this.name = name;
@@ -36,26 +36,22 @@ public class Customer {
             case NEW_RELEASE:
                thisAmount += each.getDaysRented() * 3;
                break;
-            case CHILDRENS:
+            case CHILDREN:
                thisAmount += 1.5;
                if (each.getDaysRented() > 3)
                   thisAmount += (each.getDaysRented() - 3) * 1.5;
                break;
          }
-         // add frequent renter points
          frequentRenterPoints++;
-         // add bonus for a two day new release rental
-         if ((each.getMovie().getPriceCode() == Movie.Category.NEW_RELEASE)
-             && each.getDaysRented() > 1)
+         if (each.hasBonusPoint()) {
             frequentRenterPoints++;
-         // show figures for this rental
-         result += "\t" + each.getMovie().getTitle() + "\t"
-             + thisAmount + "\n";
+         }
+         result += "\t" + each.getMovie().getTitle() + "\t" + thisAmount + "\n";
          totalAmount += thisAmount;
       }
       // add footer lines
       result += "Amount owed is " + totalAmount + "\n";
-      result += "You earned " + String.valueOf(frequentRenterPoints)
+      result += "You earned " + frequentRenterPoints
           + " frequent renter points";
       return result;
    }
