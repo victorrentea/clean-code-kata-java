@@ -6,7 +6,6 @@ import java.util.List;
 public class Customer {
     private final String name;
     private final List<Rental> rentals = new ArrayList<>();
-    private final double REGULAR_COST = 2.0;
 
     public Customer(String name) {
         this.name = name;
@@ -16,16 +15,12 @@ public class Customer {
         rentals.add(arg);
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public String statement() {
+   public String generateRentalRecord() {
         StringBuilder result = new StringBuilder("Rental Record for " + name + "\n");
         rentals.forEach(rental ->
                 result.append("\t" + rental.getMovie().getTitle() + "\t" + rental.getPrice() + "\n")
         );
-        result.append("Amount owed is " + this.generateCosts())
+        result.append("Amount owed is " + generateCosts())
                 .append("\nYou earned " + generateRenterPoints() + " frequent renter points");
         return result.toString();
     }
