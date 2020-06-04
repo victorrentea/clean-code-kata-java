@@ -1,13 +1,17 @@
 package videostore;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class StatementFormatter {
 
-    private final Customer customer;
+    private final String customerName;
+    private final List<Rental> rentals = new ArrayList<>();
 
-    public StatementFormatter(Customer customer) {
-        this.customer = customer;
+    public StatementFormatter(String customerName, List<Rental> rentals) {
+        this.customerName = customerName;
+        this.rentals.addAll(rentals);
     }
 
     public String getGeneratedStatement() {
@@ -15,20 +19,27 @@ public class StatementFormatter {
     }
 
     private String generateFooter() {
-        return "Amount owed is " + customer.generateCosts() +
-                "\nYou earned " + customer.generateRenterPoints() + " frequent renter points";
+        return "Amount owed is " + generateCosts() +
+                "\nYou earned " + generateRenterPoints() + " frequent renter points";
     }
 
     private String generateHeader() {
-        return "Rental Record for " + customer.getName();
+        return "Rental Record for " + customerName;
     }
 
-
     private String generateStatementBody() {
-        return customer.getRentals().stream().map(this::generateRentalStatement).collect(Collectors.joining("\n"));
+        return rentals.stream().map(this::generateRentalStatement).collect(Collectors.joining("\n"));
     }
 
     private String generateRentalStatement(Rental rental) {
         return "\t" + rental.getMovie().getTitle() + "\t" + rental.getPrice();
+    }
+
+    public double generateCosts() {
+        return rentals.stream().mapToDouble(Rental::getPrice).sum();
+    }
+
+    public int generateRenterPoints() {
+        return rentals.stream().mapToInt(Rental::getRentalPoints).sum();
     }
 }
