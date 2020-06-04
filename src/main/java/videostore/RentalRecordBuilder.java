@@ -10,24 +10,33 @@ public class RentalRecordBuilder {
     }
 
     public String build() {
-        double totalPrice = 0;
-        int frequentRenterPoints = 0;
-
-        String result = headerLines();
-        for (Rental rental: customer.getRentals()) {
-            frequentRenterPoints += rental.getPoints();
-            result += "\t" + rental.getMovie().getTitle() + "\t" + rental.getPrice() + "\n";
-            totalPrice += rental.getPrice();
-        }
-
-        return result + footerLines(totalPrice, frequentRenterPoints);
+        String header = headerLines();
+        String body = bodyLines();
+        String footer = footerLines();
+        return header + body + footer;
     }
 
     private String headerLines() {
         return "Rental Record for " + customer.getName() + "\n";
     }
 
-    private String footerLines(double totalPrice, int frequentRenterPoints) {
+    private String bodyLines() {
+        String body = "";
+        for (Rental rental: customer.getRentals()) {
+            body += "\t" + rental.getMovie().getTitle() + "\t" + rental.getPrice() + "\n";
+        }
+        return body;
+    }
+
+    private String footerLines() {
+        double totalPrice = 0;
+        int frequentRenterPoints = 0;
+
+        for (Rental rental: customer.getRentals()) {
+            frequentRenterPoints += rental.getPoints();
+            totalPrice += rental.getPrice();
+        }
+
         String result = "Amount owed is " + totalPrice + "\n";
         result += "You earned " + String.valueOf(frequentRenterPoints)
                 + " frequent renter points";
