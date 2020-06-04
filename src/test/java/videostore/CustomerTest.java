@@ -23,4 +23,6 @@ public class CustomerTest {
         
         Assert.assertEquals(expected, customer.statement());
     }
+
+    //test git
 }
