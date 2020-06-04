@@ -3,21 +3,30 @@ package videostore;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Customer {
+class Customer {
     private final String name;
     private final List<Rental> rentals;
 
-    public Customer (String name, final List<Rental> rentals) {
+    Customer (String name, final List<Rental> rentals) {
         this.name = name;
         this.rentals = rentals;
     }
 
-    public String statement () {
-        StringBuilder result = new StringBuilder ("Rental Record for " + name + "\n");
-        result.append (getFiguresForRental ());
-        double totalPrice = rentals.stream ().mapToDouble (this::computePrice).sum ();
+    private static double applyAsDouble (Rental rental) {
+        return rental.getMovie ().computePrice (rental);
+    }
+
+    String statement () {
+        StringBuilder result = createFooter ();
+        double totalPrice = rentals.stream ().mapToDouble (Customer::applyAsDouble).sum ();
         result.append (getFooterLines (totalPrice, computeTotalFrequentPoints ()));
         return result.toString ();
+    }
+
+    private StringBuilder createFooter () {
+        StringBuilder result = new StringBuilder ("Rental Record for " + name + "\n");
+        result.append (getFiguresForRental ());
+        return result;
     }
 
     private String getFiguresForRental () {
@@ -27,10 +36,10 @@ public class Customer {
     }
 
     private String formatStatementLine (final Rental rental) {
-        return String.format ("\t%s\t%s\n", rental.getMovie ().getTitle (), computePrice (rental));
+        return String.format ("\t%s\t%s\n", rental.getMovie ().getTitle (), rental.getMovie ().computePrice (rental));
     }
 
-    String getFooterLines (final double totalPrice, final int frequentRenterPoints) {
+    private String getFooterLines (final double totalPrice, final int frequentRenterPoints) {
         return String.format ("Amount owed is %s\nYou earned %s frequent renter points", totalPrice, frequentRenterPoints);
     }
 
@@ -41,8 +50,5 @@ public class Customer {
                 .sum ();
     }
 
-    private double computePrice (Rental rental) {
-        return rental.getMovie ().getCategory ().compute (rental);
-    }
 
 }

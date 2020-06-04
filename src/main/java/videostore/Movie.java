@@ -41,16 +41,16 @@ public class Movie {
         this.category = priceCode;
     }
 
-    public Category getCategory () {
-        return category;
-    }
-
     public String getTitle () {
         return title;
     }
 
     public boolean isNewRelease () {
         return this.category == Movie.Category.NEW_RELEASE;
+    }
+
+    public double computePrice (Rental rental) {
+        return category.compute (rental);
     }
 
 }
