@@ -1,6 +1,7 @@
 package videostore;
 
 import java.util.*;
+import java.util.stream.*;
 
 public class Customer {
    private String name;
@@ -20,7 +21,7 @@ public class Customer {
 
    public String statement() {
       double totalAmount = 0;
-      int frequentRenterPoints = 0;
+      int frequentRenterPoints = computeFrequentRenterPoints();
 
       Iterator<Rental> rentals = this.rentals.iterator();
       String result = "Rental Record for " + getName() + "\n";
@@ -28,10 +29,7 @@ public class Customer {
          Rental rental = rentals.next();
          // determine amounts for rental line
          double thisAmount = computeAmmount (rental);
-         // add frequent renter points
-         frequentRenterPoints++;
-         if (rental.shouldAddBonus ())
-            frequentRenterPoints++;
+
          // show figures for this rental
          result += "\t" + rental.getMovie().getTitle() + "\t"
              + thisAmount + "\n";
@@ -42,6 +40,18 @@ public class Customer {
       result += "You earned " + frequentRenterPoints
           + " frequent renter points";
       return result;
+   }
+
+   private int computeFrequentRenterPoints() {
+       int frequentRenterPoints = 0;
+       this.rentals.stream()
+           .map(rental -> {
+               frequentRenterPoints++;
+               if (rental.shouldAddBonus ()) {
+                   frequentRenterPoints++;
+               }
+           });
+       return frequentRenterPoints;
    }
 
    private double computeAmmount (Rental each) {
