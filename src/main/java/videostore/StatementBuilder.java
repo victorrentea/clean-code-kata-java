@@ -19,18 +19,14 @@ public class StatementBuilder {
         Iterator<Rental> rentals = this.rentals.iterator();
         String result = "Rental Record for " + name + "\n";
         while (rentals.hasNext()) {
-            Rental each = rentals.next();
-            double thisAmount = each.getPrice();
-            // add frequent renter points
-            frequentRenterPoints++;
-            // add bonus for a two day new release rental
-            if ((each.getMovie().getCategory() == Movie.Category.NEW_RELEASE)
-                    && each.getDaysRented() > 1)
-                frequentRenterPoints++;
+            Rental rental = rentals.next();
+            double rentalPrice = rental.getPrice();
+            frequentRenterPoints += rental.getPoints();
+
             // show figures for this rental
-            result += "\t" + each.getMovie().getTitle() + "\t"
-                    + thisAmount + "\n";
-            totalAmount += thisAmount;
+            result += "\t" + rental.getMovie().getTitle() + "\t" + rentalPrice + "\n";
+
+            totalAmount += rentalPrice;
         }
         return result + addFooterLines(totalAmount, frequentRenterPoints);
     }
