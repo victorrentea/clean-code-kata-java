@@ -3,69 +3,71 @@ package videostore;
 import java.util.*;
 
 public class Customer {
-   private String name;
-   private List<Rental> rentals = new ArrayList<>();
+    private String name;
+    private List<Rental> rentals = new ArrayList<> ();
 
-   public Customer(String name) {
-      this.name = name;
-   }
+    public Customer (String name) {
+        this.name = name;
+    }
 
-   public void addRental(Rental arg) {
-      rentals.add(arg);
-   }
+    public void addRental (Rental arg) {
+        rentals.add (arg);
+    }
 
-   public String getName() {
-      return name;
-   }
+    public String getName () {
+        return name;
+    }
 
-   public String statement() {
-      double totalAmount = 0;
-      int frequentRenterPoints = computeTotalFrequentPoints ();
+    public String statement () {
+        double totalPrice = 0;
+        int frequentRenterPoints = computeTotalFrequentPoints ();
 
-      Iterator<Rental> rentals = this.rentals.iterator();
-      String result = "Rental Record for " + getName() + "\n";
-      while (rentals.hasNext()) {
-         Rental rental = rentals.next();
-         // determine amounts for rental line
-         double thisAmount = computeAmmount (rental);
+        StringBuilder result = new StringBuilder ("Rental Record for " + name  + "\n");
 
-         // show figures for this rental
-         result += "\t" + rental.getMovie().getTitle() + "\t"
-             + thisAmount + "\n";
-         totalAmount += thisAmount;
-      }
-      // add footer lines
-      result += "Amount owed is " + totalAmount + "\n";
-      result += "You earned " + frequentRenterPoints
-          + " frequent renter points";
-      return result;
-   }
+        for (final Rental rental : rentals) {
+            // determine amounts for rental line
+            double price = computeAmount (rental);
+            // show figures for this rental
+            result.append ("\t").append (rental.getMovie ().getTitle ()).append ("\t").append (price).append ("\n");
+            totalPrice += price;
+        }
 
-   private int computeTotalFrequentPoints () {
-       return this.rentals.stream ()
-               .mapToInt (Rental::computeFrequentPoints)
-               .sum ();
-   }
+        // add footer lines
+        getFooterLines (totalPrice, frequentRenterPoints, result);
+        return result.toString ();
+    }
 
-    private double computeAmmount (Rental each) {
-      double thisAmount = 0;
-      Movie.Category priceCode = each.getMovie ().getPriceCode ();
+    void getFooterLines (final double totalPrice, final int frequentRenterPoints, final StringBuilder result) {
+        result.append ("Amount owed is ").append (totalPrice).append ("\n");
+        result.append ("You earned ").append (frequentRenterPoints).append (" frequent renter points");
+    }
 
-      switch (priceCode) {
-         case REGULAR:
-            thisAmount += 2;
-            if (each.getDaysRented() > 2)
-               thisAmount += (each.getDaysRented() - 2) * 1.5;
-            break;
-         case NEW_RELEASE:
-            thisAmount += each.getDaysRented() * 3;
-            break;
-         case CHILDREN:
-            thisAmount += 1.5;
-            if (each.getDaysRented() > 3)
-               thisAmount += (each.getDaysRented() - 3) * 1.5;
-            break;
-      }
-      return thisAmount;
-   }
+
+    private int computeTotalFrequentPoints () {
+        return this.rentals.stream ()
+                .mapToInt (Rental::computeFrequentPoints)
+                .sum ();
+    }
+
+    private double computeAmount (Rental each) {
+        double thisAmount = 0;
+        Movie.Category priceCode = each.getMovie ().getPriceCode ();
+
+        switch (priceCode) {
+            case REGULAR:
+                thisAmount += 2;
+                if (each.getDaysRented () > 2)
+                    thisAmount += (each.getDaysRented () - 2) * 1.5;
+                break;
+            case NEW_RELEASE:
+                thisAmount += each.getDaysRented () * 3;
+                break;
+            case CHILDREN:
+                thisAmount += 1.5;
+                if (each.getDaysRented () > 3)
+                    thisAmount += (each.getDaysRented () - 3) * 1.5;
+                break;
+        }
+        return thisAmount;
+    }
 }
