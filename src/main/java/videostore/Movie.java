@@ -1,6 +1,7 @@
 package videostore;
 
 public class Movie {
+
   public enum Category {
     CHILDRENS,
     REGULAR,
