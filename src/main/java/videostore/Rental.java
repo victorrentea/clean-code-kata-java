@@ -1,34 +1,32 @@
 package videostore;
 
 public class Rental {
-  private final Movie movie;
-  private final int daysRented;
+    private final Movie movie;
+    private final int daysRented;
 
-  public Rental(Movie movie, int daysRented) {
-    this.movie = movie;
-    this.daysRented = daysRented;
-  }
+    public Rental (Movie movie, int daysRented) {
+        this.movie = movie;
+        this.daysRented = daysRented;
+    }
 
-  public int getDaysRented() {
-    return daysRented;
-  }
+    public int getDaysRented () {
+        return daysRented;
+    }
 
-  public Movie getMovie() {
-    return movie;
-  }
+    public Movie getMovie () {
+        return movie;
+    }
 
 
-  public boolean shouldAddBonus () {
-     return movie.isNewRelease ()
-             && daysRented >= 2;
-  }
+    public boolean shouldAddBonus () {
+        return movie.isNewRelease () && daysRented >= 2;
+    }
 
-  int computeFrequentPoints () {
-     int frequentRenterPoints = 1;
-     if (shouldAddBonus ()) {
-        frequentRenterPoints++ ;
-     }
-
-     return frequentRenterPoints;
-  }
+    int computeFrequentPoints () {
+        int frequentRenterPoints = 1;
+        if (shouldAddBonus ()) {
+            frequentRenterPoints++;
+        }
+        return frequentRenterPoints;
+    }
 }

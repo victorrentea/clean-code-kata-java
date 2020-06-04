@@ -1,10 +1,11 @@
 package videostore;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Customer {
-    private String name;
-    private List<Rental> rentals = new ArrayList<> ();
+    private final String name;
+    private final List<Rental> rentals = new ArrayList<> ();
 
     public Customer (String name) {
         this.name = name;
@@ -14,27 +15,22 @@ public class Customer {
         rentals.add (arg);
     }
 
-    public String getName () {
-        return name;
+    public String statement () {
+        StringBuilder result = new StringBuilder ("Rental Record for " + name + "\n");
+        result.append (getFiguresForRental ());
+        double totalPrice = rentals.stream ().mapToDouble (this::computePrice).sum ();
+        getFooterLines (totalPrice, computeTotalFrequentPoints (), result);
+        return result.toString ();
     }
 
-    public String statement () {
-        double totalPrice = 0;
-        int frequentRenterPoints = computeTotalFrequentPoints ();
+    private String getFiguresForRental () {
+        return rentals.stream()
+                .map (this::formatStatementLine)
+                .collect (Collectors.joining ());
+    }
 
-        StringBuilder result = new StringBuilder ("Rental Record for " + name  + "\n");
-
-        for (final Rental rental : rentals) {
-            // determine amounts for rental line
-            double price = computeAmount (rental);
-            // show figures for this rental
-            result.append ("\t").append (rental.getMovie ().getTitle ()).append ("\t").append (price).append ("\n");
-            totalPrice += price;
-        }
-
-        // add footer lines
-        getFooterLines (totalPrice, frequentRenterPoints, result);
-        return result.toString ();
+    private String formatStatementLine (final Rental rental) {
+        return String.format ("\t%s\t%s\n", rental.getMovie ().getTitle (), computePrice (rental));
     }
 
     void getFooterLines (final double totalPrice, final int frequentRenterPoints, final StringBuilder result) {
@@ -49,25 +45,8 @@ public class Customer {
                 .sum ();
     }
 
-    private double computeAmount (Rental each) {
-        double thisAmount = 0;
-        Movie.Category priceCode = each.getMovie ().getPriceCode ();
-
-        switch (priceCode) {
-            case REGULAR:
-                thisAmount += 2;
-                if (each.getDaysRented () > 2)
-                    thisAmount += (each.getDaysRented () - 2) * 1.5;
-                break;
-            case NEW_RELEASE:
-                thisAmount += each.getDaysRented () * 3;
-                break;
-            case CHILDREN:
-                thisAmount += 1.5;
-                if (each.getDaysRented () > 3)
-                    thisAmount += (each.getDaysRented () - 3) * 1.5;
-                break;
-        }
-        return thisAmount;
+    private double computePrice (Rental rental) {
+        return rental.getMovie ().getCategory ().compute (rental);
     }
+
 }
