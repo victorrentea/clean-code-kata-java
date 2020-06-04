@@ -21,34 +21,34 @@ public class Customer {
    public String statement() {
       double totalAmount = 0;
       int frequentRenterPoints = 0;
+
       Iterator<Rental> rentals = this.rentals.iterator();
       String result = "Rental Record for " + getName() + "\n";
       while (rentals.hasNext()) {
-         double thisAmount = 0;
-         Rental each = rentals.next();
-         // determine amounts for each line
-         thisAmount = getThisAmount(each);
+         Rental rental = rentals.next();
+         // determine amounts for rental line
+         double thisAmount = computeAmmount (rental);
          // add frequent renter points
          frequentRenterPoints++;
-         // add bonus for a two day new release rental
-         if ((each.getMovie().getPriceCode() == Movie.Category.NEW_RELEASE)
-             && each.getDaysRented() > 1)
+         if (rental.shouldAddBonus ())
             frequentRenterPoints++;
          // show figures for this rental
-         result += "\t" + each.getMovie().getTitle() + "\t"
+         result += "\t" + rental.getMovie().getTitle() + "\t"
              + thisAmount + "\n";
          totalAmount += thisAmount;
       }
       // add footer lines
       result += "Amount owed is " + totalAmount + "\n";
-      result += "You earned " + String.valueOf(frequentRenterPoints)
+      result += "You earned " + frequentRenterPoints
           + " frequent renter points";
       return result;
    }
 
-   private double getThisAmount(Rental each) {
+   private double computeAmmount (Rental each) {
       double thisAmount = 0;
-      switch (each.getMovie().getPriceCode()) {
+      Movie.Category priceCode = each.getMovie ().getPriceCode ();
+
+      switch (priceCode) {
          case REGULAR:
             thisAmount += 2;
             if (each.getDaysRented() > 2)
@@ -57,7 +57,7 @@ public class Customer {
          case NEW_RELEASE:
             thisAmount += each.getDaysRented() * 3;
             break;
-         case CHILDRENS:
+         case CHILDREN:
             thisAmount += 1.5;
             if (each.getDaysRented() > 3)
                thisAmount += (each.getDaysRented() - 3) * 1.5;
