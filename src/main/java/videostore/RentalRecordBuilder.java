@@ -3,14 +3,10 @@ package videostore;
 import java.util.*;
 
 public class RentalRecordBuilder {
+    private final Customer customer;
 
-    private final String name;
-    private final List<Rental> rentals;
-
-    public RentalRecordBuilder(String name, List<Rental> rentals) {
-        //TODO add validations?
-        this.name = name;
-        this.rentals = rentals;
+    public RentalRecordBuilder(Customer customer) {
+        this.customer = customer;
     }
 
     public String build() {
@@ -18,7 +14,7 @@ public class RentalRecordBuilder {
         int frequentRenterPoints = 0;
 
         String result = headerLines();
-        for (Rental rental: rentals) {
+        for (Rental rental: customer.getRentals()) {
             frequentRenterPoints += rental.getPoints();
             result += "\t" + rental.getMovie().getTitle() + "\t" + rental.getPrice() + "\n";
             totalAmount += rental.getPrice();
@@ -28,7 +24,7 @@ public class RentalRecordBuilder {
     }
 
     private String headerLines() {
-        return "Rental Record for " + name + "\n";
+        return "Rental Record for " + customer.getName() + "\n";
     }
 
     private String footerLines(double totalAmount, int frequentRenterPoints) {

@@ -21,7 +21,7 @@ public class RentalRecordBuilderTest {
                 + "Amount owed is 32.0\n"
                 + "You earned 4 frequent renter points";
 
-        RentalRecordBuilder builder = new RentalRecordBuilder(customer.getName(), customer.getRentals());
+        RentalRecordBuilder builder = new RentalRecordBuilder(customer);
         Assert.assertEquals(expected, builder.build());
     }
 }
