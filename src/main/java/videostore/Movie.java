@@ -1,28 +1,25 @@
 package videostore;
 
 public class Movie {
-  public enum Category {
-    CHILDRENS,
-    REGULAR,
-    NEW_RELEASE
-  }
-  private String title;
-  private Category priceCode;
+    public enum Category {
+        CHILDREN,
+        REGULAR,
+        NEW_RELEASE
+    }
 
-  public Movie(String title, Category priceCode) {
-    this.title = title;
-    this.priceCode = priceCode;
-  }
+    private final String title;
+    private final Category category;
 
-  public Category getPriceCode() {
-    return priceCode;
-  }
+    public Movie(String title, Category category) {
+        this.title = title;
+        this.category = category;
+    }
 
-  public void setPriceCode(Category arg) {
-    priceCode = arg;
-  }
+    public Category getCategory() {
+        return category;
+    }
 
-  public String getTitle() {
-    return title;
-  }
+    public String getTitle() {
+        return title;
+    }
 }
