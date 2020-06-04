@@ -6,16 +6,16 @@ public class Rental {
     private final Movie movie;
     private final int daysRented;
 
-    public Movie getMovie() {
-        return movie;
-    }
-
     public Rental(Movie movie, int daysRented) {
         if (movie == null || daysRented == 0) {
             throw new IllegalArgumentException();
         }
         this.movie = movie;
         this.daysRented = daysRented;
+    }
+
+    public Movie getMovie() {
+        return movie;
     }
 
     public boolean hasBonusPoint() {
