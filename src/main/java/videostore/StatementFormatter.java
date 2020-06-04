@@ -11,12 +11,18 @@ public class StatementFormatter {
     }
 
     public String getGeneratedStatement() {
-        String header = "Rental Record for " + customer.getName();
-        String body = generateStatementBody();
-        String footer = "Amount owed is " + customer.generateCosts() +
-                "\nYou earned " + customer.generateRenterPoints() + " frequent renter points";
-        return header + "\n" + body + "\n" + footer;
+        return generateHeader() + "\n" + generateStatementBody() + "\n" + generateFooter();
     }
+
+    private String generateFooter() {
+        return "Amount owed is " + customer.generateCosts() +
+                "\nYou earned " + customer.generateRenterPoints() + " frequent renter points";
+    }
+
+    private String generateHeader() {
+        return "Rental Record for " + customer.getName();
+    }
+
 
     private String generateStatementBody() {
         return customer.getRentals().stream().map(this::generateRentalStatement).collect(Collectors.joining("\n"));
