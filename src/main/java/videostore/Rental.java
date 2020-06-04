@@ -22,4 +22,13 @@ public class Rental {
      return movie.isNewRelease ()
              && daysRented >= 2;
   }
+
+  int computeFrequentPoints () {
+     int frequentRenterPoints = 1;
+     if (shouldAddBonus ()) {
+        frequentRenterPoints++ ;
+     }
+
+     return frequentRenterPoints;
+  }
 }
